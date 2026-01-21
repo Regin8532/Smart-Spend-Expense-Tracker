@@ -1,0 +1,48 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">SmartSpend</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+
+<body>
+<nav th:fragment="nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/dashboard">SmartSpend</a>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-light btn-sm" href="/expenses">Expenses</a>
+            <a class="btn btn-outline-light btn-sm" href="/budgets">Budgets</a>
+            <a class="btn btn-outline-light btn-sm" href="/notifications">Notifications</a>
+            <a class="btn btn-warning btn-sm" href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div th:fragment="scripts(userId)" th:inline="javascript">
+    <script>
+        const userId = [[${userId}]];
+        if (userId) {
+          const socket = new SockJS('/ws');
+          const stompClient = Stomp.over(socket);
+          stompClient.connect({}, function () {
+            stompClient.subscribe('/topic/alerts/' + userId, function (msg) {
+              const el = document.getElementById('wsAlert');
+              if (el) {
+                el.classList.remove('d-none');
+                el.innerText = msg.body;
+                setTimeout(() => el.classList.add('d-none'), 8000);
+              } else {
+                alert(msg.body);
+              }
+            });
+          });
+        }
+    </script>
+</div>
+</body>
+</html>

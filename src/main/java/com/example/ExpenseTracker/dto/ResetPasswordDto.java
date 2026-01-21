@@ -1,0 +1,17 @@
+package com.example.ExpenseTracker.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public class ResetPasswordDto {
+    @NotBlank
+    private String token;
+
+    @Size(min=6)
+    private String newPassword;
+
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
+    public String getNewPassword() { return newPassword; }
+    public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
+}
