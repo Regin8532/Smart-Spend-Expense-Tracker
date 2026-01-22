@@ -66,17 +66,24 @@ public class ReportService {
             int r = 1;
             for (Expense e : list) {
                 var row = sheet.createRow(r++);
-                row.createCell(0).setCellValue(String.valueOf(e.getDate()));
-                row.createCell(1).setCellValue(e.getType());
-                row.createCell(2).setCellValue(e.getCategory());
-                row.createCell(3).setCellValue(e.getTitle());
-                row.createCell(4).setCellValue(String.valueOf(e.getAmount()));
+                row.createCell(0).setCellValue(e.getDate() == null ? "" : e.getDate().toString());
+                row.createCell(1).setCellValue(e.getType() == null ? "" : e.getType());
+                row.createCell(2).setCellValue(e.getCategory() == null ? "" : e.getCategory());
+                row.createCell(3).setCellValue(e.getTitle() == null ? "" : e.getTitle());
+                row.createCell(4).setCellValue(e.getAmount() == null ? "0" : e.getAmount().toString());
                 row.createCell(5).setCellValue(e.getDescription() == null ? "" : e.getDescription());
             }
 
-            for (int i = 0; i <= 5; i++) sheet.autoSizeColumn(i);
+            sheet.setColumnWidth(0, 14 * 256);
+            sheet.setColumnWidth(1, 12 * 256);
+            sheet.setColumnWidth(2, 16 * 256);
+            sheet.setColumnWidth(3, 24 * 256);
+            sheet.setColumnWidth(4, 12 * 256);
+            sheet.setColumnWidth(5, 40 * 256);
 
             wb.write(response.getOutputStream());
+            response.flushBuffer();
         }
     }
+
 }
