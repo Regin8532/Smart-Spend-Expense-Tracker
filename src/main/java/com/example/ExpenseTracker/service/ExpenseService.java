@@ -57,7 +57,7 @@ public class ExpenseService {
     }
 
     private void checkBudgetAlerts(User user, String category, LocalDate expenseDate) {
-        String month = YearMonth.from(expenseDate).toString(); // 2026-01
+        String month = YearMonth.from(expenseDate).toString();
         Budget b = budgetService.getBudget(user.getId(), month, category);
         if (b == null) return;
 
